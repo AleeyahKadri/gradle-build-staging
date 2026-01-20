@@ -18,13 +18,14 @@ pluginManagement {
   repositories {
     mavenLocal()
     gradlePluginPortal()
-    maven { url 'https://dl.bintray.com/brambolt/public' }
+    maven { url = uri("https://dl.bintray.com/brambolt/public") }
   }
   plugins {
-    id 'com.brambolt.gradle.build.plugin' version bramboltVersion
+    val bramboltVersion: String by settings
+    id("com.brambolt.gradle.build.plugin") version bramboltVersion
   }
 }
 
-rootProject.name = 'brambolt-gradle-build-staging'
+rootProject.name = "brambolt-gradle-build-staging"
 
-include 'samples'
+include("samples")
