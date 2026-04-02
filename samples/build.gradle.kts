@@ -4,7 +4,7 @@ val runSimple by tasks.registering(Exec::class) {
   workingDir = file("simple")
   commandLine("../../gradlew", "all", "--info", "--stacktrace", "--no-daemon")
   doFirst {
-    file("$workingDir/build").deleteRecursively()
+    file("$workingDir/build").delete()
   }
 }
 
@@ -12,7 +12,7 @@ val runWithDefaults by tasks.registering(Exec::class) {
   workingDir = file("with-defaults")
   commandLine("../../gradlew", "all", "--info", "--stacktrace", "--no-daemon")
   doFirst {
-    file("$workingDir/build").deleteRecursively()
+    file("$workingDir/build").delete()
   }
 }
 
