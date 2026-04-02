@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.withGroovyBuilder
+
 /*
  * Copyright 2017-2020 Brambolt ehf.
  *
@@ -15,75 +17,95 @@
  */
 
 plugins {
-  id 'com.brambolt.gradle.build.staging' apply false
+  id("com.brambolt.gradle.build.staging") apply false
 }
 
-description = 'A simple sample for the Brambolt staging build plugin.'
-group = 'com.brambolt.gradle.samples'
+description = "A simple sample for the Brambolt staging build plugin."
+group = "com.brambolt.gradle.samples"
 
-ext {
-  artifactClassifier = 'simple'
-  artifactId = 'brambolt-gradle-build-staging-sample'
-  developers = [[
-    email: 'stefan.sigurdsson@brambolt.com',
-    id: 'stefan.sigurdsson@brambolt.com',
-    name: 'Stefán Sigurðsson'
-  ]]
-  inceptionYear = '2017'
-  isOpenSource = false // Disabled publishing the sample to plugins.gradle.org or Bintray
-  licenses = [[
-    id: 'Apache-2.0',
-    name: 'The Apache Software License, Version 2.0',
-    url: 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-  ]]
-  release = bramboltRelease
-  vcsUrl = 'https://github.com/brambolt/gradle-build-staging'
+extra.apply {
+  set("artifactClassifier", "simple")
+  set("artifactId", "brambolt-gradle-build-staging-sample")
+  set(
+    "developers",
+    listOf(
+      mapOf(
+        "email" to "stefan.sigurdsson@brambolt.com",
+        "id" to "stefan.sigurdsson@brambolt.com",
+        "name" to "Stefán Sigurðsson"
+      )
+    )
+  )
+  set("inceptionYear", "2017")
+  set("isOpenSource", false)
+  set(
+    "licenses",
+    listOf(
+      mapOf(
+        "id" to "Apache-2.0",
+        "name" to "The Apache Software License, Version 2.0",
+        "url" to "http://www.apache.org/licenses/LICENSE-2.0.txt"
+      )
+    )
+  )
+  set("release", property("bramboltRelease"))
+  set("vcsUrl", "https://github.com/brambolt/gradle-build-staging")
 }
 
-apply plugin: 'com.brambolt.gradle.build.staging'
+apply(plugin = "com.brambolt.gradle.build.staging")
 
-generateProperties {
-  prepend = true
-}
-
-velocity {
-  context(
-    dog1: 'Noah',
-    dog2: 'Phoebe')
-}
-
-staging {
-  targets(
-    t1: [name: 't1'],
-    t2: [name: 't2'])
-}
-
-apply plugin: 'com.jfrog.artifactory'
-
-artifactory {
-  contextUrl = project.artifactoryContextUrl
-  publish {
-    repository {
-      repoKey = project.artifactoryRepoKey
-      username = project.artifactoryUser
-      password = project.artifactoryToken
-      maven = true
-    }
-    defaults {
-      publications('mavenCustom')
-      publishArtifacts = true
-      publishPom = true
-    }
-  }
-  resolve {
-    repository {
-      repoKey = project.artifactoryRepoKey
-      username = project.artifactoryUser
-      password = project.artifactoryToken
-      maven = true
-    }
+project.withGroovyBuilder {
+  "generateProperties" {
+    setProperty("prepend", true)
   }
 }
 
-all.dependsOn(artifactoryPublish)
+project.withGroovyBuilder {
+  "velocity" {
+    "context"(mapOf("dog1" to "Noah", "dog2" to "Phoebe"))
+  }
+}
 
+project.withGroovyBuilder {
+  "staging" {
+    "targets"(
+      mapOf(
+        "t1" to mapOf("name" to "t1"),
+        "t2" to mapOf("name" to "t2")
+      )
+    )
+  }
+}
+
+apply(plugin = "com.jfrog.artifactory")
+
+project.withGroovyBuilder {
+  "artifactory" {
+    setProperty("contextUrl", property("artifactoryContextUrl"))
+    "publish" {
+      "repository" {
+        setProperty("repoKey", property("artifactoryRepoKey"))
+        setProperty("username", property("artifactoryUser"))
+        setProperty("password", property("artifactoryToken"))
+        setProperty("maven", true)
+      }
+      "defaults" {
+        "publications"("mavenCustom")
+        setProperty("publishArtifacts", true)
+        setProperty("publishPom", true)
+      }
+    }
+    "resolve" {
+      "repository" {
+        setProperty("repoKey", property("artifactoryRepoKey"))
+        setProperty("username", property("artifactoryUser"))
+        setProperty("password", property("artifactoryToken"))
+        setProperty("maven", true)
+      }
+    }
+  }
+}
+
+tasks.named("all") {
+  dependsOn("artifactoryPublish")
+}

@@ -58,14 +58,14 @@ extra.apply {
 apply(plugin = "com.brambolt.gradle.build.plugin")
 
 dependencies {
-  implementation("com.brambolt:brambolt-rt:${property("bramboltVersion")}")
-  implementation("com.brambolt.gradle:brambolt-gradle-build-archive:${property("bramboltVersion")}")
-  implementation("com.brambolt.gradle:brambolt-gradle-build-plugin:${property("bramboltVersion")}")
-  implementation("com.brambolt.gradle:brambolt-gradle-velocity:${property("bramboltVersion")}")
-  implementation("com.brambolt.gradle:brambolt-gradle-staging:${property("bramboltVersion")}")
+  add("implementation", "com.brambolt:brambolt-rt:${property("bramboltVersion")}")
+  add("implementation", "com.brambolt.gradle:brambolt-gradle-build-archive:${property("bramboltVersion")}")
+  add("implementation", "com.brambolt.gradle:brambolt-gradle-build-plugin:${property("bramboltVersion")}")
+  add("implementation", "com.brambolt.gradle:brambolt-gradle-velocity:${property("bramboltVersion")}")
+  add("implementation", "com.brambolt.gradle:brambolt-gradle-staging:${property("bramboltVersion")}")
 }
 
-tasks.test {
+tasks.withType<org.gradle.api.tasks.testing.Test>().configureEach {
   testLogging {
     showStandardStreams = true
   }
